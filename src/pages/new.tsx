@@ -1,10 +1,10 @@
 import Head from "next/head";
 import Image from "next/image";
-import styles from "src/styles/Home.module.css";
+import styles from "../styles/Home.module.css";
 import { Layout } from "src/component/layout";
-import Link from "next/link";
+import { Form } from "src/component/form/form";
 
-export default function Home() {
+export default function New() {
   return (
     <div className={styles.container}>
       <Head>
@@ -13,8 +13,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <div>hoge</div>
-        <Link href="/new">Newへ</Link>
+        <div>New</div>
+        <Form />
       </Layout>
     </div>
   );
