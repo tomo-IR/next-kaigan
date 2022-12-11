@@ -1,5 +1,11 @@
 import { FunctionComponent } from "react";
+import { Nav } from "./nav";
 
 export const Header: FunctionComponent = () => {
-  return <div>header</div>;
+  return (
+    <div>
+      header
+      <Nav />
+    </div>
+  );
 };
