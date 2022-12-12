@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FunctionComponent } from "react";
-import style from "./nav.module.scss";
+import style from "./nav.module.css";
 
 export const Nav: FunctionComponent = () => {
   return (

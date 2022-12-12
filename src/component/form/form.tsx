@@ -12,7 +12,6 @@ export const Form: FunctionComponent = () => {
 
   return (
     <div className="App">
-      <h1>ログイン</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="email">Email</label>
