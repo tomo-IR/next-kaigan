@@ -13,7 +13,7 @@ export default function Login() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>Login</div>
-      <Button>Click me</Button>;
+      <Button>Click me</Button>
       <Form />
     </div>
   );

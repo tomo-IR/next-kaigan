@@ -1,11 +1,12 @@
+import { Container } from "@nextui-org/react";
 import { FunctionComponent } from "react";
 import { Nav } from "./nav";
 
 export const Header: FunctionComponent = () => {
   return (
-    <div>
+    <Container css={{ background: "#ECFDF4" }}>
       header
       <Nav />
-    </div>
+    </Container>
   );
 };
