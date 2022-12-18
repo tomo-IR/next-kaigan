@@ -1,30 +1,41 @@
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
+import * as React from "react";
+import { AppProps } from "next/app";
+import PropTypes from "prop-types";
+import Head from "next/head";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { CacheProvider, EmotionCache } from "@emotion/react";
+import theme from "../../src/theme";
+import createEmotionCache from "../../src/createEmotionCache";
 import { Layout } from "../component/layout";
-import { createTheme, NextUIProvider } from "@nextui-org/react";
-import { text } from "node:stream/consumers";
-export default function App({ Component, pageProps }: AppProps) {
-  const theme = createTheme({
-    type: "light",
-    theme: {
-      colors: {
-        backgound: "#78F2AD",
-        // text: "$white",
 
-        gradient:
-          "linear-gradient(112deg, $blue100 -25%, $pink500 -10%, $purple500 80%)",
-        link: "#5E1DAD",
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
 
-        // you can also create your own color
-        myColor: "#0A6130",
-      },
-    },
-  });
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+function App(props: MyAppProps) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
   return (
-    <NextUIProvider theme={theme}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </NextUIProvider>
+    <CacheProvider value={emotionCache}>
+      <ThemeProvider theme={theme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
+    </CacheProvider>
   );
 }
+
+App.propTypes = {
+  Component: PropTypes.elementType.isRequired,
+  emotionCache: PropTypes.object,
+  pageProps: PropTypes.object.isRequired,
+};
+
+export default App;

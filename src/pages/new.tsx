@@ -2,8 +2,33 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { Form } from "src/component/form/form";
+import { styled } from "@mui/system";
+import { css } from "@mui/styled-engine";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import React from "react";
 
+// const RedColor = css({
+//   color: "red",
+// });
+
+// const Welcome = styled("span")({
+//   color: "lightblue",
+//   backgroundColor: "blue",
+//   padding: 8,
+//   borderRadius: 4,
+// });
 export default function New() {
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value as string);
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -12,7 +37,26 @@ export default function New() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>New</div>
+
       <Form />
+
+      <Button variant="text">Text</Button>
+      <Button variant="contained">Contained</Button>
+      <Button variant="outlined">Outlined</Button>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Age"
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
     </div>
   );
 }
