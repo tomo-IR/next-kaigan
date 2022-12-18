@@ -1,8 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import Button from "@mui/material/Button";
 import { Form } from "src/component/form/form";
-import { Button } from "@nextui-org/react";
 
 export default function Login() {
   return (
@@ -13,7 +13,7 @@ export default function Login() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>Login</div>
-      <Button>Click me</Button>
+      <Button variant="contained">Login</Button>
       <Form />
     </div>
   );
