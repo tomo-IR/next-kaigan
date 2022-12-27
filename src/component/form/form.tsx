@@ -20,7 +20,7 @@ export interface Kaigan {
   place: string;
   club: string;
   action: string;
-  bodyParts: string;
+  bodyParts: string[];
   errors: string[];
   detail: string;
 }
@@ -34,6 +34,44 @@ const MenuProps = {
     },
   },
 };
+const errors = [
+  "フック",
+  "チーピン",
+  "スライス",
+  "プル",
+  "プッシュ",
+  "ダフリ",
+  "トップ",
+  "チョロ",
+  "シャンク",
+  "テンプラ",
+  "空振り",
+  "その他エラー",
+];
+const bodyParts = [
+  "頭",
+  "手",
+  "腕",
+  "肩",
+  "胸",
+  "背中",
+  "腹",
+  "腰",
+  "足",
+  "膝",
+  "足裏",
+];
+const places = ["ゴルフ場", "ショートコース", "レンジ", "自宅"];
+const clubs = [
+  "ウッド",
+  "アイアン",
+  "UT",
+  "ウエッジ",
+  "パター",
+  "クラブ問わず",
+  "ショット全般",
+  "パッティング全般",
+];
 function getStyles(name: string, personName: string[], theme: Theme) {
   return {
     fontWeight:
@@ -50,7 +88,7 @@ export const Form: FunctionComponent = () => {
     place: "",
     club: "",
     action: "",
-    bodyParts: "",
+    bodyParts: [],
     errors: [],
     detail: "",
   });
@@ -74,45 +112,31 @@ export const Form: FunctionComponent = () => {
     setKaigan({ ...kaigan, action: event.target.value });
   };
 
-  const changeBodyParts = (event: SelectChangeEvent) => {
-    setKaigan({ ...kaigan, bodyParts: event.target.value });
-  };
-
-  // const changeError = (event: SelectChangeEvent) => {
-  //   setKaigan({ ...kaigan, error: event.target.value });
-  // };
-
   const changeDetail = (event: any) => {
     setKaigan({ ...kaigan, rank: event.target.value });
   };
-  const selectErrors = (event: SelectChangeEvent<typeof kaigan.errors>) => {
+  const handleSelectErrors = (
+    event: SelectChangeEvent<typeof kaigan.errors>
+  ) => {
     const {
       target: { value },
     } = event;
-    // setPersonName(
-    //   // On autofill we get a stringified value.
-    //   typeof value === "string" ? value.split(",") : value
-    // );
     setKaigan({
       ...kaigan,
       errors: typeof value === "string" ? value.split(",") : value,
     });
   };
-  const errors = [
-    "フック",
-    "チーピン",
-    "スライス",
-    "プル",
-    "プッシュ",
-    "ダフリ",
-    "トップ",
-    "チョロ",
-    "シャンク",
-    "テンプラ",
-    "空振り",
-    "その他エラー",
-  ];
-  // const [personName, setPersonName] = React.useState<string[]>([]);
+  const handleSelectBodyParts = (
+    event: SelectChangeEvent<typeof kaigan.bodyParts>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setKaigan({
+      ...kaigan,
+      bodyParts: typeof value === "string" ? value.split(",") : value,
+    });
+  };
 
   console.log(kaigan);
 
@@ -125,7 +149,7 @@ export const Form: FunctionComponent = () => {
           id="demo-multiple-checkbox"
           multiple
           value={kaigan.errors}
-          onChange={selectErrors}
+          onChange={handleSelectErrors}
           input={<OutlinedInput />}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
@@ -138,7 +162,28 @@ export const Form: FunctionComponent = () => {
           ))}
         </Select>
       </FormControl>
-
+      <br />
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-checkbox-label">体の部位</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={kaigan.bodyParts}
+          onChange={handleSelectBodyParts}
+          input={<OutlinedInput />}
+          renderValue={(selected) => selected.join(", ")}
+          MenuProps={MenuProps}
+        >
+          {bodyParts.map((part) => (
+            <MenuItem key={part} value={part}>
+              <Checkbox checked={kaigan.bodyParts.indexOf(part) > -1} />
+              <ListItemText primary={part} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <br />
       <TextField
         id="date"
         label="開眼した日"
@@ -180,7 +225,7 @@ export const Form: FunctionComponent = () => {
           <MenuItem value={"シャンク"}>シャンク</MenuItem>
         </Select>
       </FormControl> */}
-      <FormControl fullWidth>
+      {/* <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">ボディパーツ</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -192,7 +237,7 @@ export const Form: FunctionComponent = () => {
         >
           <MenuItem value={"肩"}>肩</MenuItem>
         </Select>
-      </FormControl>
+      </FormControl> */}
 
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">ボディアクション</InputLabel>
