@@ -8,6 +8,11 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useState } from "react";
+import React from "react";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import { Theme, useTheme } from "@mui/material/styles";
+import ListItemText from "@mui/material/ListItemText";
+import Checkbox from "@mui/material/Checkbox";
 
 export interface Kaigan {
   date: string;
@@ -16,10 +21,29 @@ export interface Kaigan {
   club: string;
   action: string;
   bodyParts: string;
-  error: string;
+  errors: string[];
   detail: string;
 }
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+function getStyles(name: string, personName: string[], theme: Theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
 export const Form: FunctionComponent = () => {
+  const theme = useTheme();
   const [kaigan, setKaigan] = useState<Kaigan>({
     date: "",
     rank: 3,
@@ -27,7 +51,7 @@ export const Form: FunctionComponent = () => {
     club: "",
     action: "",
     bodyParts: "",
-    error: "",
+    errors: [],
     detail: "",
   });
 
@@ -54,17 +78,67 @@ export const Form: FunctionComponent = () => {
     setKaigan({ ...kaigan, bodyParts: event.target.value });
   };
 
-  const changeError = (event: SelectChangeEvent) => {
-    setKaigan({ ...kaigan, error: event.target.value });
-  };
+  // const changeError = (event: SelectChangeEvent) => {
+  //   setKaigan({ ...kaigan, error: event.target.value });
+  // };
 
   const changeDetail = (event: any) => {
     setKaigan({ ...kaigan, rank: event.target.value });
   };
+  const selectErrors = (event: SelectChangeEvent<typeof kaigan.errors>) => {
+    const {
+      target: { value },
+    } = event;
+    // setPersonName(
+    //   // On autofill we get a stringified value.
+    //   typeof value === "string" ? value.split(",") : value
+    // );
+    setKaigan({
+      ...kaigan,
+      errors: typeof value === "string" ? value.split(",") : value,
+    });
+  };
+  const errors = [
+    "フック",
+    "チーピン",
+    "スライス",
+    "プル",
+    "プッシュ",
+    "ダフリ",
+    "トップ",
+    "チョロ",
+    "シャンク",
+    "テンプラ",
+    "空振り",
+    "その他エラー",
+  ];
+  // const [personName, setPersonName] = React.useState<string[]>([]);
+
   console.log(kaigan);
 
   return (
     <>
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-checkbox-label">エラー現象</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={kaigan.errors}
+          onChange={selectErrors}
+          input={<OutlinedInput />}
+          renderValue={(selected) => selected.join(", ")}
+          MenuProps={MenuProps}
+        >
+          {errors.map((error) => (
+            <MenuItem key={error} value={error}>
+              <Checkbox checked={kaigan.errors.indexOf(error) > -1} />
+              <ListItemText primary={error} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <TextField
         id="date"
         label="開眼した日"
@@ -93,7 +167,7 @@ export const Form: FunctionComponent = () => {
         </Select>
       </FormControl>
 
-      <FormControl fullWidth>
+      {/* <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">エラー</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -105,7 +179,7 @@ export const Form: FunctionComponent = () => {
         >
           <MenuItem value={"シャンク"}>シャンク</MenuItem>
         </Select>
-      </FormControl>
+      </FormControl> */}
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">ボディパーツ</InputLabel>
         <Select
