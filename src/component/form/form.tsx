@@ -116,7 +116,7 @@ export const Form: FunctionComponent = () => {
   };
 
   const changeDetail = (event: any) => {
-    setKaigan({ ...kaigan, rank: event.target.value });
+    setKaigan({ ...kaigan, detail: event.target.value });
   };
   const handleSelectErrors = (
     event: SelectChangeEvent<typeof kaigan.errors>
@@ -186,56 +186,110 @@ export const Form: FunctionComponent = () => {
 
   return (
     <>
-      <TextField
-        id="date"
-        label="開眼した日"
-        type="date"
-        sx={{ width: 220 }}
-        defaultValue={kaigan.date}
-        onChange={changeDate}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      <br />
-      <label htmlFor="">開眼度</label>
-      <br />
-      <Rating name="simple-controlled" onChange={changeRank} />
-      <br />
-      <TextField
-        id="filled-multiline-flexible"
-        label="具体的な開眼内容"
-        multiline
-        maxRows={4}
-        variant="filled"
-        onChange={changeDetail}
-        sx={{ width: 320, height: 200 }}
-      />
-      <br />
-      <p>開眼詳細</p>
-      <p>起きていたエラー現象</p>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">エラー現象</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={kaigan.errors}
-          onChange={handleSelectErrors}
-          input={<OutlinedInput />}
-          renderValue={(selected) => selected.join(", ")}
-          MenuProps={MenuProps}
-        >
-          {errors.map((error) => (
-            <MenuItem key={error} value={error}>
-              <Checkbox checked={kaigan.errors.indexOf(error) > -1} />
-              <ListItemText primary={error} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <br />
-      <p>悪さをしていた体の部位</p>
+      <section>
+        <h3>開眼したこと</h3>
+        <p>いつ開眼しましたか？</p>
+        <TextField
+          id="date"
+          label="開眼した日"
+          type="date"
+          sx={{ width: 220 }}
+          defaultValue={kaigan.date}
+          onChange={changeDate}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <br />
+        <label htmlFor="">開眼度はいくつですか？</label>
+        <br />
+        <Rating name="simple-controlled" onChange={changeRank} />
+        <br />
+        <p>どこで開眼しましたか？</p>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="demo-multiple-checkbox-label">場所</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            multiple
+            value={kaigan.places}
+            onChange={handleSelectPlaces}
+            input={<OutlinedInput />}
+            renderValue={(selected) => selected.join(", ")}
+            MenuProps={MenuProps}
+          >
+            {places.map((error) => (
+              <MenuItem key={error} value={error}>
+                <Checkbox checked={kaigan.places.indexOf(error) > -1} />
+                <ListItemText primary={error} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <br />
+        <p>開眼した内容について詳しく記入してください。</p>
+        <TextField
+          id="filled-multiline-flexible"
+          label="具体的な開眼内容"
+          multiline
+          maxRows={6}
+          variant="filled"
+          onChange={changeDetail}
+          sx={{ width: 320, height: 100 }}
+        />
+        <br />
+      </section>
+      <section>
+        <p>どのような問題が起きていましたか？</p>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="demo-multiple-checkbox-label">エラー現象</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            multiple
+            value={kaigan.errors}
+            onChange={handleSelectErrors}
+            input={<OutlinedInput />}
+            renderValue={(selected) => selected.join(", ")}
+            MenuProps={MenuProps}
+          >
+            {errors.map((error) => (
+              <MenuItem key={error} value={error}>
+                <Checkbox checked={kaigan.errors.indexOf(error) > -1} />
+                <ListItemText primary={error} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <br />
+        <p>どのクラブで問題が起きていましたか？</p>
+
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="demo-multiple-checkbox-label">クラブ</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            multiple
+            value={kaigan.clubs}
+            onChange={handleSelectClubs}
+            input={<OutlinedInput />}
+            renderValue={(selected) => selected.join(", ")}
+            MenuProps={MenuProps}
+          >
+            {clubs.map((club) => (
+              <MenuItem key={club} value={club}>
+                <Checkbox checked={kaigan.clubs.indexOf(club) > -1} />
+                <ListItemText primary={club} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <br />
+      </section>
+      <section>
+        <h3>原因</h3>
+      </section>
+      <p>問題の原因となっていた身体の部位はどこですか？</p>
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">体の部位</InputLabel>
         <Select
@@ -257,52 +311,8 @@ export const Form: FunctionComponent = () => {
         </Select>
       </FormControl>
       <br />
-      <p>問題が起きていたクラブ</p>
 
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">クラブ</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={kaigan.clubs}
-          onChange={handleSelectClubs}
-          input={<OutlinedInput />}
-          renderValue={(selected) => selected.join(", ")}
-          MenuProps={MenuProps}
-        >
-          {clubs.map((club) => (
-            <MenuItem key={club} value={club}>
-              <Checkbox checked={kaigan.clubs.indexOf(club) > -1} />
-              <ListItemText primary={club} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <br />
-      <p>問題が起きていた場所</p>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">場所</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={kaigan.places}
-          onChange={handleSelectPlaces}
-          input={<OutlinedInput />}
-          renderValue={(selected) => selected.join(", ")}
-          MenuProps={MenuProps}
-        >
-          {places.map((error) => (
-            <MenuItem key={error} value={error}>
-              <Checkbox checked={kaigan.places.indexOf(error) > -1} />
-              <ListItemText primary={error} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <br />
-      <p>改善したアクション</p>
+      <p>どのアクションで意識することで改善されましたか？</p>
 
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">アクション</InputLabel>
@@ -340,6 +350,8 @@ export const Form: FunctionComponent = () => {
             {kaigan.date}
             <br />
             {kaigan.rank}
+            <br />
+            {JSON.stringify(kaigan)}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
