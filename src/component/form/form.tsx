@@ -11,6 +11,12 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { Theme, useTheme } from "@mui/material/styles";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
+import * as React from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 export interface Kaigan {
   date: string;
@@ -166,11 +172,48 @@ export const Form: FunctionComponent = () => {
       clubs: typeof value === "string" ? value.split(",") : value,
     });
   };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   console.log(kaigan);
 
   return (
     <>
+      <TextField
+        id="date"
+        label="開眼した日"
+        type="date"
+        sx={{ width: 220 }}
+        defaultValue={kaigan.date}
+        onChange={changeDate}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+      <br />
+      <label htmlFor="">開眼度</label>
+      <br />
+      <Rating name="simple-controlled" onChange={changeRank} />
+      <br />
+      <TextField
+        id="filled-multiline-flexible"
+        label="具体的な開眼内容"
+        multiline
+        maxRows={4}
+        variant="filled"
+        onChange={changeDetail}
+        sx={{ width: 320, height: 200 }}
+      />
+      <br />
+      <p>開眼詳細</p>
+      <p>起きていたエラー現象</p>
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">エラー現象</InputLabel>
         <Select
@@ -192,6 +235,7 @@ export const Form: FunctionComponent = () => {
         </Select>
       </FormControl>
       <br />
+      <p>悪さをしていた体の部位</p>
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">体の部位</InputLabel>
         <Select
@@ -213,6 +257,7 @@ export const Form: FunctionComponent = () => {
         </Select>
       </FormControl>
       <br />
+      <p>問題が起きていたクラブ</p>
 
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">クラブ</InputLabel>
@@ -235,6 +280,7 @@ export const Form: FunctionComponent = () => {
         </Select>
       </FormControl>
       <br />
+      <p>問題が起きていた場所</p>
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">場所</InputLabel>
         <Select
@@ -256,6 +302,7 @@ export const Form: FunctionComponent = () => {
         </Select>
       </FormControl>
       <br />
+      <p>改善したアクション</p>
 
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">アクション</InputLabel>
@@ -278,32 +325,34 @@ export const Form: FunctionComponent = () => {
         </Select>
       </FormControl>
       <br />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {/* {"Use Google's location service?"} */}
+          {"下記の内容で登録しますよろしいですか？"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {kaigan.date}
+            <br />
+            {kaigan.rank}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>キャンセル</Button>
+          <Button onClick={handleClose} autoFocus>
+            登録する
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-      <TextField
-        id="date"
-        label="開眼した日"
-        type="date"
-        sx={{ width: 220 }}
-        defaultValue={kaigan.date}
-        onChange={changeDate}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      <br />
-      <Rating name="simple-controlled" onChange={changeRank} />
-      <br />
-
-      <TextField
-        id="filled-multiline-flexible"
-        label="Multiline"
-        multiline
-        maxRows={4}
-        variant="filled"
-        onChange={changeDetail}
-      />
-      <br />
-      <Button variant="contained">開眼を登録する</Button>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        開眼を登録する
+      </Button>
     </>
   );
 };
