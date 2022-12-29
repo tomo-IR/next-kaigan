@@ -5,10 +5,8 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Rating from "@mui/material/Rating";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import React from "react";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { Theme, useTheme } from "@mui/material/styles";
 import ListItemText from "@mui/material/ListItemText";
@@ -17,9 +15,9 @@ import Checkbox from "@mui/material/Checkbox";
 export interface Kaigan {
   date: string;
   rank: number;
-  place: string;
-  club: string;
-  action: string;
+  places: string[];
+  clubs: string[];
+  actions: string[];
   bodyParts: string[];
   errors: string[];
   detail: string;
@@ -72,6 +70,17 @@ const clubs = [
   "ショット全般",
   "パッティング全般",
 ];
+
+const actions = [
+  "アドレス",
+  "バックスイング",
+  "トップ",
+  "ダウンスイング",
+  "インパクト",
+  "フォロー",
+  "フィニッシュ",
+  "切り返し",
+];
 function getStyles(name: string, personName: string[], theme: Theme) {
   return {
     fontWeight:
@@ -81,13 +90,13 @@ function getStyles(name: string, personName: string[], theme: Theme) {
   };
 }
 export const Form: FunctionComponent = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const [kaigan, setKaigan] = useState<Kaigan>({
     date: "",
     rank: 3,
-    place: "",
-    club: "",
-    action: "",
+    places: [],
+    clubs: [],
+    actions: [],
     bodyParts: [],
     errors: [],
     detail: "",
@@ -98,18 +107,6 @@ export const Form: FunctionComponent = () => {
   };
   const changeRank = (event: any) => {
     setKaigan({ ...kaigan, rank: event.target.value });
-  };
-
-  const changePlace = (event: SelectChangeEvent) => {
-    setKaigan({ ...kaigan, place: event.target.value });
-  };
-
-  const changeClub = (event: SelectChangeEvent) => {
-    setKaigan({ ...kaigan, club: event.target.value });
-  };
-
-  const changeAction = (event: SelectChangeEvent) => {
-    setKaigan({ ...kaigan, action: event.target.value });
   };
 
   const changeDetail = (event: any) => {
@@ -126,6 +123,17 @@ export const Form: FunctionComponent = () => {
       errors: typeof value === "string" ? value.split(",") : value,
     });
   };
+  const handleSelectPlaces = (
+    event: SelectChangeEvent<typeof kaigan.places>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setKaigan({
+      ...kaigan,
+      places: typeof value === "string" ? value.split(",") : value,
+    });
+  };
   const handleSelectBodyParts = (
     event: SelectChangeEvent<typeof kaigan.bodyParts>
   ) => {
@@ -135,6 +143,27 @@ export const Form: FunctionComponent = () => {
     setKaigan({
       ...kaigan,
       bodyParts: typeof value === "string" ? value.split(",") : value,
+    });
+  };
+  const handleSelectActions = (
+    event: SelectChangeEvent<typeof kaigan.actions>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setKaigan({
+      ...kaigan,
+      actions: typeof value === "string" ? value.split(",") : value,
+    });
+  };
+
+  const handleSelectClubs = (event: SelectChangeEvent<typeof kaigan.clubs>) => {
+    const {
+      target: { value },
+    } = event;
+    setKaigan({
+      ...kaigan,
+      clubs: typeof value === "string" ? value.split(",") : value,
     });
   };
 
@@ -184,6 +213,72 @@ export const Form: FunctionComponent = () => {
         </Select>
       </FormControl>
       <br />
+
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-checkbox-label">クラブ</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={kaigan.clubs}
+          onChange={handleSelectClubs}
+          input={<OutlinedInput />}
+          renderValue={(selected) => selected.join(", ")}
+          MenuProps={MenuProps}
+        >
+          {clubs.map((club) => (
+            <MenuItem key={club} value={club}>
+              <Checkbox checked={kaigan.clubs.indexOf(club) > -1} />
+              <ListItemText primary={club} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <br />
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-checkbox-label">場所</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={kaigan.places}
+          onChange={handleSelectPlaces}
+          input={<OutlinedInput />}
+          renderValue={(selected) => selected.join(", ")}
+          MenuProps={MenuProps}
+        >
+          {places.map((error) => (
+            <MenuItem key={error} value={error}>
+              <Checkbox checked={kaigan.places.indexOf(error) > -1} />
+              <ListItemText primary={error} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <br />
+
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-checkbox-label">アクション</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={kaigan.actions}
+          onChange={handleSelectActions}
+          input={<OutlinedInput />}
+          renderValue={(selected) => selected.join(", ")}
+          MenuProps={MenuProps}
+        >
+          {actions.map((error) => (
+            <MenuItem key={error} value={error}>
+              <Checkbox checked={kaigan.actions.indexOf(error) > -1} />
+              <ListItemText primary={error} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <br />
+
       <TextField
         id="date"
         label="開眼した日"
@@ -199,76 +294,6 @@ export const Form: FunctionComponent = () => {
       <Rating name="simple-controlled" onChange={changeRank} />
       <br />
 
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">場所</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="場所"
-          onChange={changePlace}
-          value={kaigan.place}
-        >
-          <MenuItem value={"レンジ"}>レンジ</MenuItem>
-        </Select>
-      </FormControl>
-
-      {/* <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">エラー</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="エラー"
-          onChange={changeError}
-          value={kaigan.error}
-          // value={action}
-        >
-          <MenuItem value={"シャンク"}>シャンク</MenuItem>
-        </Select>
-      </FormControl> */}
-      {/* <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">ボディパーツ</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="場所"
-          onChange={changeBodyParts}
-          value={kaigan.bodyParts}
-          // value={action}
-        >
-          <MenuItem value={"肩"}>肩</MenuItem>
-        </Select>
-      </FormControl> */}
-
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">ボディアクション</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="action"
-          onChange={changeAction}
-          value={kaigan.action}
-          // value={action}
-        >
-          <MenuItem value={"アドレス"}>アドレス</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">クラブ</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Club"
-          value={kaigan.club}
-          onChange={changeClub}
-        >
-          <MenuItem value={"ドライバー"}>ドライバー</MenuItem>
-          <MenuItem value={"フェアウェイウッド"}>フェアウェイウッド</MenuItem>
-          <MenuItem value={"ユーティリティ"}>ユーティリティ</MenuItem>
-          <MenuItem value={"アイアン"}>アイアン</MenuItem>
-          <MenuItem value={"ウェッジ"}>ウェッジ</MenuItem>
-          <MenuItem value={"パター"}>パター</MenuItem>
-        </Select>
-      </FormControl>
       <TextField
         id="filled-multiline-flexible"
         label="Multiline"
