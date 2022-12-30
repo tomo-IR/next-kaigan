@@ -17,7 +17,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-
+import { useRegistKaigan } from "@/src/hooks/kaigan/useRegistButton";
 export interface Kaigan {
   date: string;
   rank: number;
@@ -180,6 +180,9 @@ export const Form: FunctionComponent = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleRegistKaigan = () => {
+    useRegistKaigan();
   };
 
   console.log(kaigan);
@@ -356,7 +359,7 @@ export const Form: FunctionComponent = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>キャンセル</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handleRegistKaigan} autoFocus>
             登録する
           </Button>
         </DialogActions>
