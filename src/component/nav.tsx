@@ -15,6 +15,9 @@ export const Nav: FunctionComponent = () => {
         <li>
           <Link href="/login">ログイン</Link>
         </li>
+        <li>
+          <Link href="/mypage">My Page</Link>
+        </li>
       </ul>
     </nav>
   );

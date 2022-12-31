@@ -18,16 +18,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useRegistKaigan } from "@/src/hooks/kaigan/useRegistButton";
-export interface Kaigan {
-  date: string;
-  rank: number;
-  places: string[];
-  clubs: string[];
-  actions: string[];
-  bodyParts: string[];
-  errors: string[];
-  detail: string;
-}
+import { Kaigan } from "@/src/interface/kaigan";
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -182,7 +174,7 @@ export const Form: FunctionComponent = () => {
     setOpen(false);
   };
   const handleRegistKaigan = () => {
-    useRegistKaigan();
+    useRegistKaigan(kaigan);
   };
 
   console.log(kaigan);

@@ -69,12 +69,13 @@ export default function MyPage() {
           );
         });
         setData(mydata);
-        setMessage("Firebase data.");
+        setMessage("");
       });
   }, []);
   return (
     <div>
       <h2>My Page</h2>
+      <h5 className="mb-4">{message}</h5>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
