@@ -28,17 +28,43 @@ export default function MyPage() {
         snapshot.forEach((document: any) => {
           const doc = document.data();
           console.log(doc);
+          const places: any = [];
+          const actions: any = [];
+          const bodyParts: any = [];
+          const errors: any = [];
+          const clubs: any = [];
+          const placesArray = doc.places;
+          placesArray?.forEach((place: any, index: number) => {
+            places.push(<p key={index}>{place}</p>);
+          });
+
+          const actionsArray = doc.actions;
+          actionsArray?.map((action: string, index: number) => {
+            actions.push(<p key={index}>{action}</p>);
+          });
+          const bodyPartsArray = doc.bodyParts;
+          bodyPartsArray?.forEach((bodyPart: string, index: number) => {
+            bodyParts.push(<p key={index}>{bodyPart}</p>);
+          });
+          const errorsArray = doc.errors;
+          errorsArray?.forEach((error: string, index: number) => {
+            errors.push(<p key={index}>{error}</p>);
+          });
+          const clubsArray = doc.clubs;
+          clubsArray?.forEach((club: string, index: number) => {
+            clubs.push(<p key={index}>{club}</p>);
+          });
           mydata.push(
             <TableRow key={document.id}>
-              <TableCell>{document.id}</TableCell>
               <TableCell>{doc.date}</TableCell>
-              <TableCell>{doc.places}</TableCell>
+              <TableCell>{places}</TableCell>
+
               <TableCell>{doc.rank}</TableCell>
               <TableCell>{doc.detail}</TableCell>
-              <TableCell>{doc.actions}</TableCell>
-              <TableCell>{doc.bodyParts}</TableCell>
-              <TableCell>{doc.errors}</TableCell>
-              <TableCell>{doc.clubs}</TableCell>
+              <TableCell>{actions}</TableCell>
+              <TableCell>{bodyParts}</TableCell>
+              <TableCell>{errors}</TableCell>
+              <TableCell>{clubs}</TableCell>
             </TableRow>
           );
         });
@@ -53,7 +79,6 @@ export default function MyPage() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>日付</TableCell>
               <TableCell>開眼した場所</TableCell>
               <TableCell>開眼度</TableCell>
