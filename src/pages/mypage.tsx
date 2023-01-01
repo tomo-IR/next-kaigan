@@ -13,6 +13,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useDeleteKaigan } from "../hooks/kaigan/useDeleteKaigan";
+import Button from "@mui/material/Button";
 
 const db = firebase.firestore();
 
@@ -20,6 +30,10 @@ export default function MyPage() {
   const mydata: any = [];
   const [data, setData] = useState(mydata);
   const [message, setMessage] = useState("wait...");
+
+  const handleDeleteKaigan = () => {
+    useDeleteKaigan();
+  };
 
   useEffect(() => {
     db.collection("kaigan")
@@ -65,6 +79,13 @@ export default function MyPage() {
               <TableCell>{bodyParts}</TableCell>
               <TableCell>{errors}</TableCell>
               <TableCell>{clubs}</TableCell>
+              <TableCell>
+                <Tooltip title="Delete" onClick={handleClickOpen}>
+                  <IconButton>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </TableCell>
             </TableRow>
           );
         });
@@ -72,6 +93,16 @@ export default function MyPage() {
         setMessage("");
       });
   }, []);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <h2>My Page</h2>
@@ -88,11 +119,31 @@ export default function MyPage() {
               <TableCell>体の部位</TableCell>
               <TableCell>エラー現象</TableCell>
               <TableCell>クラブ</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{data}</TableBody>
         </Table>
       </TableContainer>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {/* {"Use Google's location service?"} */}
+          {"削除してよろしいですか？"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description"></DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>キャンセル</Button>
+          <Button onClick={handleDeleteKaigan}>削除する</Button>
+          // TODO 削除機能
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

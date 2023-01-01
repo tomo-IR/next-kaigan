@@ -17,7 +17,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useRegistKaigan } from "@/src/hooks/kaigan/useRegistButton";
+import { useRegistKaigan } from "@/src/hooks/kaigan/useRegistKaigan";
 import { Kaigan } from "@/src/interface/kaigan";
 
 const ITEM_HEIGHT = 48;
@@ -175,6 +175,7 @@ export const Form: FunctionComponent = () => {
   };
   const handleRegistKaigan = () => {
     useRegistKaigan(kaigan);
+    // TODO 成功したら、snacbarを表示
   };
 
   console.log(kaigan);
