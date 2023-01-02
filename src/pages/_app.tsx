@@ -8,6 +8,12 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import theme from "../../src/theme";
 import createEmotionCache from "../../src/createEmotionCache";
 import { Layout } from "../component/layout";
+import { useEffect } from "react";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "../hooks/firebase/fire";
+import router from "next/router";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -17,7 +23,14 @@ interface MyAppProps extends AppProps {
 }
 
 function App(props: MyAppProps) {
+  const auth = firebase.auth();
+  const provider = new firebase.auth.GoogleAuthProvider();
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  useEffect(() => {
+    if (!auth.currentUser) {
+      router.push("/");
+    }
+  });
 
   return (
     <CacheProvider value={emotionCache}>

@@ -23,8 +23,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteKaigan } from "../hooks/kaigan/useDeleteKaigan";
 import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import router from "next/router";
 
 const db = firebase.firestore();
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+// auth.signOut();
 
 export default function MyPage() {
   const mydata: any = [];
@@ -32,10 +37,22 @@ export default function MyPage() {
   const [message, setMessage] = useState("wait...");
 
   const handleDeleteKaigan = () => {
-    useDeleteKaigan();
+    // useDeleteKaigan();
   };
 
+  //   useEffect(() => {
+  //     auth
+  //       .signInWithPopup(provider)
+  //       .then((result: any) => {
+  //         setMessage("logined: " + result.user.displayName);
+  //       })
+  //       .catch((error) => {
+  //         setMessage("not logined.");
+  //       });
+  //   }, []);
+
   useEffect(() => {
+    // if (auth.currentUser != null) {
     db.collection("kaigan")
       .get()
       .then((snapshot: any) => {
@@ -80,6 +97,9 @@ export default function MyPage() {
               <TableCell>{errors}</TableCell>
               <TableCell>{clubs}</TableCell>
               <TableCell>
+                <EditIcon />
+              </TableCell>
+              <TableCell>
                 <Tooltip title="Delete" onClick={handleClickOpen}>
                   <IconButton>
                     <DeleteIcon />
@@ -92,7 +112,16 @@ export default function MyPage() {
         setData(mydata);
         setMessage("");
       });
+    // } else {
+    //   router.push("/");
+    //   mydata.push(
+    //     <TableRow>
+    //       <TableCell key="1">can't get data</TableCell>
+    //     </TableRow>
+    //   );
+    // }
   }, []);
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -119,6 +148,7 @@ export default function MyPage() {
               <TableCell>体の部位</TableCell>
               <TableCell>エラー現象</TableCell>
               <TableCell>クラブ</TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
