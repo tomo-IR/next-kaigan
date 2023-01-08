@@ -13,9 +13,6 @@ export const Nav: FunctionComponent = () => {
           <Link href="/new">新規登録</Link>
         </li>
         <li>
-          <Link href="/login">ログイン</Link>
-        </li>
-        <li>
           <Link href="/mypage">My Page</Link>
         </li>
       </ul>

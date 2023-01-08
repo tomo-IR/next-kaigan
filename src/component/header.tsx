@@ -5,24 +5,25 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "../hooks/firebase/fire";
 import { LogoutButton } from "./signOutButton";
+import { LoginButton } from "./signInButton";
 
 export const Header: FunctionComponent = () => {
   const auth = firebase.auth();
   const provider = new firebase.auth.GoogleAuthProvider();
   const [userName, setUserName] = useState("");
-
-  useEffect(() => {
-    auth.signInWithPopup(provider).then((result: any) => {
-      console.log(auth);
-      setUserName(result?.user.displayName);
-    });
-  }, []);
+  auth.onAuthStateChanged((user) => {
+    console.log(user?.uid);
+  });
   return (
     <div>
       header
-      <Nav />
-      <p>{userName}</p>
-      <LogoutButton />
+      {auth.currentUser ? (
+        <>
+          <Nav />
+          <p>{auth.currentUser?.displayName}でログイン中</p>
+        </>
+      ) : null}
+      {auth.currentUser ? <LogoutButton /> : <LoginButton />}
     </div>
   );
 };
