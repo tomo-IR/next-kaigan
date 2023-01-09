@@ -35,91 +35,80 @@ export default function MyPage() {
   const mydata: any = [];
   const [data, setData] = useState(mydata);
   const [message, setMessage] = useState("wait...");
+  const [uid, setUid] = useState<string | undefined>("");
 
   const handleDeleteKaigan = () => {
     // useDeleteKaigan();
   };
 
-  //   useEffect(() => {
-  //     auth
-  //       .signInWithPopup(provider)
-  //       .then((result: any) => {
-  //         setMessage("logined: " + result.user.displayName);
-  //       })
-  //       .catch((error) => {
-  //         setMessage("not logined.");
-  //       });
-  //   }, []);
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setUid(user?.uid);
+    });
+  }, []);
 
   useEffect(() => {
     // if (auth.currentUser != null) {
+
     db.collection("kaigan")
+      // .doc(uid)
       .get()
       .then((snapshot: any) => {
         snapshot.forEach((document: any) => {
           const doc = document.data();
-          console.log(doc);
-          const places: any = [];
-          const actions: any = [];
-          const bodyParts: any = [];
-          const errors: any = [];
-          const clubs: any = [];
-          const placesArray = doc.places;
-          placesArray?.forEach((place: any, index: number) => {
-            places.push(<p key={index}>{place}</p>);
+          doc.kaigan.map((item: any, i: number) => {
+            const places: any = [];
+            const actions: any = [];
+            const bodyParts: any = [];
+            const errors: any = [];
+            const clubs: any = [];
+            const clubsArray = item.clubs;
+            clubsArray?.forEach((club: string, index: number) => {
+              clubs.push(<p key={index}>{club}</p>);
+            });
+            const actionsArray = item.actions;
+            actionsArray?.map((action: string, index: number) => {
+              actions.push(<p key={index}>{action}</p>);
+            });
+            const bodyPartsArray = item.bodyParts;
+            bodyPartsArray?.forEach((bodyPart: string, index: number) => {
+              bodyParts.push(<p key={index}>{bodyPart}</p>);
+            });
+            const errorsArray = item.errors;
+            errorsArray?.forEach((error: string, index: number) => {
+              errors.push(<p key={index}>{error}</p>);
+            });
+            const placesArray = item.places;
+            placesArray?.forEach((place: string, index: number) => {
+              places.push(<p key={index}>{place}</p>);
+            });
+            mydata.push(
+              <TableRow key={i}>
+                <TableCell>{item.date}</TableCell>
+                <TableCell>{places}</TableCell>
+                <TableCell>{item.rank}</TableCell>
+                <TableCell>{item.detail}</TableCell>
+                <TableCell>{actions}</TableCell>
+                <TableCell>{bodyParts}</TableCell>
+                <TableCell>{errors}</TableCell>
+                <TableCell>{clubs}</TableCell>
+                <TableCell>
+                  <EditIcon />
+                </TableCell>
+                <TableCell>
+                  <Tooltip title="Delete" onClick={handleClickOpen}>
+                    <IconButton>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            );
           });
-
-          const actionsArray = doc.actions;
-          actionsArray?.map((action: string, index: number) => {
-            actions.push(<p key={index}>{action}</p>);
-          });
-          const bodyPartsArray = doc.bodyParts;
-          bodyPartsArray?.forEach((bodyPart: string, index: number) => {
-            bodyParts.push(<p key={index}>{bodyPart}</p>);
-          });
-          const errorsArray = doc.errors;
-          errorsArray?.forEach((error: string, index: number) => {
-            errors.push(<p key={index}>{error}</p>);
-          });
-          const clubsArray = doc.clubs;
-          clubsArray?.forEach((club: string, index: number) => {
-            clubs.push(<p key={index}>{club}</p>);
-          });
-          mydata.push(
-            <TableRow key={document.id}>
-              <TableCell>{doc.date}</TableCell>
-              <TableCell>{places}</TableCell>
-
-              <TableCell>{doc.rank}</TableCell>
-              <TableCell>{doc.detail}</TableCell>
-              <TableCell>{actions}</TableCell>
-              <TableCell>{bodyParts}</TableCell>
-              <TableCell>{errors}</TableCell>
-              <TableCell>{clubs}</TableCell>
-              <TableCell>
-                <EditIcon />
-              </TableCell>
-              <TableCell>
-                <Tooltip title="Delete" onClick={handleClickOpen}>
-                  <IconButton>
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
-          );
         });
         setData(mydata);
         setMessage("");
       });
-    // } else {
-    //   router.push("/");
-    //   mydata.push(
-    //     <TableRow>
-    //       <TableCell key="1">can't get data</TableCell>
-    //     </TableRow>
-    //   );
-    // }
   }, []);
 
   const [open, setOpen] = React.useState(false);
@@ -162,7 +151,6 @@ export default function MyPage() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {/* {"Use Google's location service?"} */}
           {"削除してよろしいですか？"}
         </DialogTitle>
         <DialogContent>
