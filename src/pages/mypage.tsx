@@ -4,7 +4,6 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "../../src/hooks/firebase/fire";
-
 import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -22,6 +21,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteKaigan } from "../hooks/kaigan/useDeleteKaigan";
+import { useGetKaigan } from "../hooks/kaigan/useGetKaigan";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import router from "next/router";
@@ -36,27 +36,24 @@ export default function MyPage() {
   const [data, setData] = useState(mydata);
   const [message, setMessage] = useState("wait...");
   const [uid, setUid] = useState<string | undefined>("");
+  const [doc, setDoc] = useState<firebase.firestore.DocumentData | undefined>();
 
   const handleDeleteKaigan = () => {
     // useDeleteKaigan();
   };
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setUid(user?.uid);
-    });
-  }, []);
-
-  useEffect(() => {
-    // if (auth.currentUser != null) {
-
     db.collection("kaigan")
-      // .doc(uid)
+      .doc("gQffB3eEiGiviA6uKCoc")
       .get()
-      .then((snapshot: any) => {
-        snapshot.forEach((document: any) => {
-          const doc = document.data();
-          doc.kaigan.map((item: any, i: number) => {
+      .then(
+        (
+          documentData: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
+        ) => {
+          const doc = documentData.data();
+          doc?.kaigan.map((item: any, i: number) => {
+            console.log(i);
+            console.log(data);
             const places: any = [];
             const actions: any = [];
             const bodyParts: any = [];
@@ -105,10 +102,10 @@ export default function MyPage() {
               </TableRow>
             );
           });
-        });
-        setData(mydata);
-        setMessage("");
-      });
+          setData(mydata);
+          setMessage("MY DATA");
+        }
+      );
   }, []);
 
   const [open, setOpen] = React.useState(false);
@@ -120,7 +117,6 @@ export default function MyPage() {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <div>
       <h2>My Page</h2>
