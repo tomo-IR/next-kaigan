@@ -10,9 +10,18 @@ export const useRegistKaigan = (kaigan: Kaigan) => {
   const auth = firebase.auth();
   auth.onAuthStateChanged(async (user) => {
     const docRef = db.collection("kaigan").doc(user?.uid);
-    db.collection("kaigan")
-      .doc(user?.uid)
-      .update({ kaigan: firebase.firestore.FieldValue.arrayUnion(kaigan) });
-    await router.push("/mypage");
+    console.log(user?.uid);
+    docRef.get().then(async (data) => {
+      if (data.exists) {
+        docRef.update({
+          kaigan: firebase.firestore.FieldValue.arrayUnion(kaigan),
+        });
+        router.push("/mypage");
+      } else {
+        docRef.set({
+          kaigan: firebase.firestore.FieldValue.arrayUnion(kaigan),
+        });
+      }
+    });
   });
 };
