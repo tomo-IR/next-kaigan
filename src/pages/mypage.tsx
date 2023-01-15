@@ -28,84 +28,81 @@ import router from "next/router";
 
 const db = firebase.firestore();
 const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
-// auth.signOut();
 
 export default function MyPage() {
   const mydata: any = [];
   const [data, setData] = useState(mydata);
   const [message, setMessage] = useState("wait...");
-  const [uid, setUid] = useState<string | undefined>("");
-  const [doc, setDoc] = useState<firebase.firestore.DocumentData | undefined>();
-
   const handleDeleteKaigan = () => {
     // useDeleteKaigan();
   };
 
   useEffect(() => {
-    db.collection("kaigan")
-      .doc("gQffB3eEiGiviA6uKCoc")
-      .get()
-      .then(
-        (
-          documentData: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
-        ) => {
-          const doc = documentData.data();
-          doc?.kaigan.map((item: any, i: number) => {
-            console.log(i);
-            console.log(data);
-            const places: any = [];
-            const actions: any = [];
-            const bodyParts: any = [];
-            const errors: any = [];
-            const clubs: any = [];
-            const clubsArray = item.clubs;
-            clubsArray?.forEach((club: string, index: number) => {
-              clubs.push(<p key={index}>{club}</p>);
+    auth.onAuthStateChanged((user) => {
+      db.collection("kaigan")
+        .doc(user?.uid)
+        .get()
+        .then(
+          (
+            documentData: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
+          ) => {
+            const doc = documentData.data();
+            doc?.kaigan.map((item: any, i: number) => {
+              console.log(i);
+              console.log(data);
+              const places: any = [];
+              const actions: any = [];
+              const bodyParts: any = [];
+              const errors: any = [];
+              const clubs: any = [];
+              const clubsArray = item.clubs;
+              clubsArray?.forEach((club: string, index: number) => {
+                clubs.push(<p key={index}>{club}</p>);
+              });
+              const actionsArray = item.actions;
+              actionsArray?.map((action: string, index: number) => {
+                actions.push(<p key={index}>{action}</p>);
+              });
+              const bodyPartsArray = item.bodyParts;
+              bodyPartsArray?.forEach((bodyPart: string, index: number) => {
+                bodyParts.push(<p key={index}>{bodyPart}</p>);
+              });
+              const errorsArray = item.errors;
+              errorsArray?.forEach((error: string, index: number) => {
+                errors.push(<p key={index}>{error}</p>);
+              });
+              const placesArray = item.places;
+              placesArray?.forEach((place: string, index: number) => {
+                places.push(<p key={index}>{place}</p>);
+              });
+              mydata.push(
+                <TableRow key={i}>
+                  <TableCell>{item.date}</TableCell>
+                  <TableCell>{places}</TableCell>
+                  <TableCell>{item.rank}</TableCell>
+                  <TableCell>{item.detail}</TableCell>
+                  <TableCell>{actions}</TableCell>
+                  <TableCell>{bodyParts}</TableCell>
+                  <TableCell>{errors}</TableCell>
+                  <TableCell>{clubs}</TableCell>
+                  <TableCell>
+                    <EditIcon />
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip title="Delete" onClick={handleClickOpen}>
+                      <IconButton>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              );
             });
-            const actionsArray = item.actions;
-            actionsArray?.map((action: string, index: number) => {
-              actions.push(<p key={index}>{action}</p>);
-            });
-            const bodyPartsArray = item.bodyParts;
-            bodyPartsArray?.forEach((bodyPart: string, index: number) => {
-              bodyParts.push(<p key={index}>{bodyPart}</p>);
-            });
-            const errorsArray = item.errors;
-            errorsArray?.forEach((error: string, index: number) => {
-              errors.push(<p key={index}>{error}</p>);
-            });
-            const placesArray = item.places;
-            placesArray?.forEach((place: string, index: number) => {
-              places.push(<p key={index}>{place}</p>);
-            });
-            mydata.push(
-              <TableRow key={i}>
-                <TableCell>{item.date}</TableCell>
-                <TableCell>{places}</TableCell>
-                <TableCell>{item.rank}</TableCell>
-                <TableCell>{item.detail}</TableCell>
-                <TableCell>{actions}</TableCell>
-                <TableCell>{bodyParts}</TableCell>
-                <TableCell>{errors}</TableCell>
-                <TableCell>{clubs}</TableCell>
-                <TableCell>
-                  <EditIcon />
-                </TableCell>
-                <TableCell>
-                  <Tooltip title="Delete" onClick={handleClickOpen}>
-                    <IconButton>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            );
-          });
-          setData(mydata);
-          setMessage("MY DATA");
-        }
-      );
+            setData(mydata);
+            setMessage("MY DATA");
+          }
+        );
+    });
   }, []);
 
   const [open, setOpen] = React.useState(false);
