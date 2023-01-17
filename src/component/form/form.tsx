@@ -178,8 +178,6 @@ export const Form: FunctionComponent = () => {
     // TODO 成功したら、snacbarを表示
   };
 
-  console.log(kaigan);
-
   return (
     <>
       <section>

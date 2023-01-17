@@ -11,9 +11,6 @@ export const Header: FunctionComponent = () => {
   const auth = firebase.auth();
   const provider = new firebase.auth.GoogleAuthProvider();
   const [userName, setUserName] = useState("");
-  auth.onAuthStateChanged((user) => {
-    console.log(user?.uid);
-  });
   return (
     <div>
       header

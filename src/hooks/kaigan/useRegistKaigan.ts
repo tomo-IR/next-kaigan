@@ -10,7 +10,6 @@ export const useRegistKaigan = (kaigan: Kaigan) => {
   const auth = firebase.auth();
   auth.onAuthStateChanged(async (user) => {
     const docRef = db.collection("kaigan").doc(user?.uid);
-    console.log(user?.uid);
     docRef.get().then(async (data) => {
       if (data.exists) {
         docRef.update({
