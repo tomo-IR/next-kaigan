@@ -47,9 +47,16 @@ export default function MyPage() {
             documentData: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
           ) => {
             const doc = documentData.data();
+            if (!doc || doc?.kaigan.length === 0) {
+              setMessage("MY DATA");
+              setData(
+                <TableRow>
+                  <TableCell>ご登録ありません</TableCell>
+                </TableRow>
+              );
+              return;
+            }
             doc?.kaigan.map((item: any, i: number) => {
-              console.log(i);
-              console.log(data);
               const places: any = [];
               const actions: any = [];
               const bodyParts: any = [];
