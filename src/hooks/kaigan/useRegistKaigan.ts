@@ -8,6 +8,7 @@ import router from "next/router";
 const db = firebase.firestore();
 export const useRegistKaigan = (kaigan: Kaigan) => {
   const auth = firebase.auth();
+  /** TODO Should use auth provider */
   auth.onAuthStateChanged(async (user) => {
     const docRef = db.collection("kaigan").doc(user?.uid);
     docRef.get().then(async (data) => {

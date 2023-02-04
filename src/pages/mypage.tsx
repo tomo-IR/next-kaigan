@@ -47,6 +47,7 @@ export default function MyPage() {
   };
 
   useEffect(() => {
+    /** TODO Should use auth provider */
     auth.onAuthStateChanged((user) => {
       db.collection("kaigan")
         .doc(user?.uid)

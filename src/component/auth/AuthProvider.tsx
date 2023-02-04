@@ -31,7 +31,7 @@ const AuthProvider = ({ children }) => {
         setCurrentUser(user);
         setSignInCheck(true);
       } else {
-        setSignInCheck(true);
+        setSignInCheck(false);
       }
     });
   });
@@ -42,12 +42,9 @@ const AuthProvider = ({ children }) => {
         {children}
       </AuthContext.Provider>
     );
+  } else {
+    return <div>{children}</div>;
   }
-  //   else {
-  // ログイン確認中
-  // 自分で作ったローディングコンポーネントをレンダリングする
-  // return;
-  //   }
 };
 
 export { AuthContext, AuthProvider };

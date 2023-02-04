@@ -18,6 +18,7 @@ export const useDeleteKaigan = (kaigan: Kaigan, uid: string) => {
         kaigan: firebase.firestore.FieldValue.arrayRemove(kaigan),
       });
       router.push("/");
+      // TODO 画面リフレッシュして、tooltipだす
     }
   });
 };
