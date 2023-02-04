@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -25,16 +25,25 @@ import { useGetKaigan } from "../hooks/kaigan/useGetKaigan";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import router from "next/router";
+import { Kaigan } from "../interface/kaigan";
+// import { Uid } from "./_app";
+import { AuthContext } from "../component/auth/AuthProvider";
 
 const db = firebase.firestore();
 const auth = firebase.auth();
 
 export default function MyPage() {
+  const currentUser = useContext(AuthContext);
   const mydata: any = [];
   const [data, setData] = useState(mydata);
   const [message, setMessage] = useState("wait...");
+  const [deleteData, setDeleteData] = useState<Kaigan>();
   const handleDeleteKaigan = () => {
-    // useDeleteKaigan();
+    if (deleteData) {
+      useDeleteKaigan(deleteData, currentUser.currentUser.uid);
+      return;
+    }
+    console.log("データないよ");
   };
 
   useEffect(() => {
@@ -56,7 +65,7 @@ export default function MyPage() {
               );
               return;
             }
-            doc?.kaigan.map((item: any, i: number) => {
+            doc.kaigan.map((item: Kaigan, i: number) => {
               const places: any = [];
               const actions: any = [];
               const bodyParts: any = [];
@@ -96,7 +105,10 @@ export default function MyPage() {
                     <EditIcon />
                   </TableCell>
                   <TableCell>
-                    <Tooltip title="Delete" onClick={handleClickOpen}>
+                    <Tooltip
+                      title="Delete"
+                      onClick={() => handleClickOpen(item)}
+                    >
                       <IconButton>
                         <DeleteIcon />
                       </IconButton>
@@ -113,11 +125,10 @@ export default function MyPage() {
   }, []);
 
   const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
+  const handleClickOpen = (kaigan: Kaigan) => {
+    setDeleteData(kaigan);
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -159,7 +170,6 @@ export default function MyPage() {
         <DialogActions>
           <Button onClick={handleClose}>キャンセル</Button>
           <Button onClick={handleDeleteKaigan}>削除する</Button>
-          // TODO 削除機能
         </DialogActions>
       </Dialog>
     </div>
