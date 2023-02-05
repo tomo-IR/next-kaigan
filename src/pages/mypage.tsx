@@ -47,82 +47,78 @@ export default function MyPage() {
   };
 
   useEffect(() => {
-    /** TODO Should use auth provider */
-    auth.onAuthStateChanged((user) => {
-      db.collection("kaigan")
-        .doc(user?.uid)
-        .get()
-        .then(
-          (
-            documentData: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
-          ) => {
-            const doc = documentData.data();
-            if (!doc || doc?.kaigan.length === 0) {
-              setMessage("MY DATA");
-              setData(
-                <TableRow>
-                  <TableCell>ご登録ありません</TableCell>
-                </TableRow>
-              );
-              return;
-            }
-            doc.kaigan.map((item: Kaigan, i: number) => {
-              const places: any = [];
-              const actions: any = [];
-              const bodyParts: any = [];
-              const errors: any = [];
-              const clubs: any = [];
-              const clubsArray = item.clubs;
-              clubsArray?.forEach((club: string, index: number) => {
-                clubs.push(<p key={index}>{club}</p>);
-              });
-              const actionsArray = item.actions;
-              actionsArray?.map((action: string, index: number) => {
-                actions.push(<p key={index}>{action}</p>);
-              });
-              const bodyPartsArray = item.bodyParts;
-              bodyPartsArray?.forEach((bodyPart: string, index: number) => {
-                bodyParts.push(<p key={index}>{bodyPart}</p>);
-              });
-              const errorsArray = item.errors;
-              errorsArray?.forEach((error: string, index: number) => {
-                errors.push(<p key={index}>{error}</p>);
-              });
-              const placesArray = item.places;
-              placesArray?.forEach((place: string, index: number) => {
-                places.push(<p key={index}>{place}</p>);
-              });
-              mydata.push(
-                <TableRow key={i}>
-                  <TableCell>{item.date}</TableCell>
-                  <TableCell>{places}</TableCell>
-                  <TableCell>{item.rank}</TableCell>
-                  <TableCell>{item.detail}</TableCell>
-                  <TableCell>{actions}</TableCell>
-                  <TableCell>{bodyParts}</TableCell>
-                  <TableCell>{errors}</TableCell>
-                  <TableCell>{clubs}</TableCell>
-                  <TableCell>
-                    <EditIcon />
-                  </TableCell>
-                  <TableCell>
-                    <Tooltip
-                      title="Delete"
-                      onClick={() => handleClickOpen(item)}
-                    >
-                      <IconButton>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              );
-            });
-            setData(mydata);
+    /** 購読中にログアウトすると、権限がなくなることによるエラーがでる。 */
+    // https://tech-blog-masa7351.netlify.app/onSnapshot_security_error
+    db.collection("kaigan")
+      .doc(currentUser.currentUser.uid)
+      .get()
+      .then(
+        (
+          documentData: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
+        ) => {
+          const doc = documentData.data();
+          if (!doc || doc?.kaigan.length === 0) {
             setMessage("MY DATA");
+            setData(
+              <TableRow>
+                <TableCell>ご登録ありません</TableCell>
+              </TableRow>
+            );
+            return;
           }
-        );
-    });
+          doc.kaigan.map((item: Kaigan, i: number) => {
+            const places: any = [];
+            const actions: any = [];
+            const bodyParts: any = [];
+            const errors: any = [];
+            const clubs: any = [];
+            const clubsArray = item.clubs;
+            clubsArray?.forEach((club: string, index: number) => {
+              clubs.push(<p key={index}>{club}</p>);
+            });
+            const actionsArray = item.actions;
+            actionsArray?.map((action: string, index: number) => {
+              actions.push(<p key={index}>{action}</p>);
+            });
+            const bodyPartsArray = item.bodyParts;
+            bodyPartsArray?.forEach((bodyPart: string, index: number) => {
+              bodyParts.push(<p key={index}>{bodyPart}</p>);
+            });
+            const errorsArray = item.errors;
+            errorsArray?.forEach((error: string, index: number) => {
+              errors.push(<p key={index}>{error}</p>);
+            });
+            const placesArray = item.places;
+            placesArray?.forEach((place: string, index: number) => {
+              places.push(<p key={index}>{place}</p>);
+            });
+            mydata.push(
+              <TableRow key={i}>
+                <TableCell>{item.date}</TableCell>
+                <TableCell>{places}</TableCell>
+                <TableCell>{item.rank}</TableCell>
+                <TableCell>{item.detail}</TableCell>
+                <TableCell>{actions}</TableCell>
+                <TableCell>{bodyParts}</TableCell>
+                <TableCell>{errors}</TableCell>
+                <TableCell>{clubs}</TableCell>
+                <TableCell>
+                  <EditIcon />
+                </TableCell>
+                <TableCell>
+                  <Tooltip title="Delete" onClick={() => handleClickOpen(item)}>
+                    <IconButton>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            );
+          });
+          setData(mydata);
+          setMessage("MY DATA");
+        }
+      );
   }, []);
 
   const [open, setOpen] = React.useState(false);
