@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { KaiganForm } from "@/src/component/form/form";
+import { KaiganForm } from "@/src/component/form/kaiganForm";
 import { styled } from "@mui/system";
 import { css } from "@mui/styled-engine";
 import Stack from "@mui/material/Stack";
