@@ -87,17 +87,17 @@ function getStyles(name: string, personName: string[], theme: Theme) {
         : theme.typography.fontWeightMedium,
   };
 }
-export const Form: FunctionComponent = () => {
+export const KaiganForm = (kgn: Kaigan) => {
   // const theme = useTheme();
   const [kaigan, setKaigan] = useState<Kaigan>({
-    date: "",
-    rank: 3,
-    places: [],
-    clubs: [],
-    actions: [],
-    bodyParts: [],
-    errors: [],
-    detail: "",
+    date: kgn.date,
+    rank: kgn.rank,
+    places: kgn.places,
+    clubs: kgn.clubs,
+    actions: kgn.actions,
+    bodyParts: kgn.bodyParts,
+    errors: kgn.errors,
+    detail: kgn.detail,
   });
 
   const changeDate = (event: any) => {
@@ -193,11 +193,16 @@ export const Form: FunctionComponent = () => {
           InputLabelProps={{
             shrink: true,
           }}
+          value={kaigan.date}
         />
         <br />
         <label htmlFor="">開眼度はいくつですか？</label>
         <br />
-        <Rating name="simple-controlled" onChange={changeRank} />
+        <Rating
+          name="simple-controlled"
+          onChange={changeRank}
+          value={kaigan.rank}
+        />
         <br />
         <p>どこで開眼しましたか？</p>
         <FormControl sx={{ m: 1, width: 300 }}>
@@ -214,7 +219,7 @@ export const Form: FunctionComponent = () => {
           >
             {places.map((error) => (
               <MenuItem key={error} value={error}>
-                <Checkbox checked={kaigan.places.indexOf(error) > -1} />
+                <Checkbox checked={kaigan.places?.indexOf(error) > -1} />
                 <ListItemText primary={error} />
               </MenuItem>
             ))}
@@ -230,6 +235,7 @@ export const Form: FunctionComponent = () => {
           variant="filled"
           onChange={changeDetail}
           sx={{ width: 320, height: 100 }}
+          value={kaigan.detail}
         />
         <br />
       </section>
@@ -249,7 +255,7 @@ export const Form: FunctionComponent = () => {
           >
             {errors.map((error) => (
               <MenuItem key={error} value={error}>
-                <Checkbox checked={kaigan.errors.indexOf(error) > -1} />
+                <Checkbox checked={kaigan.errors?.indexOf(error) > -1} />
                 <ListItemText primary={error} />
               </MenuItem>
             ))}
@@ -272,7 +278,7 @@ export const Form: FunctionComponent = () => {
           >
             {clubs.map((club) => (
               <MenuItem key={club} value={club}>
-                <Checkbox checked={kaigan.clubs.indexOf(club) > -1} />
+                <Checkbox checked={kaigan.clubs?.indexOf(club) > -1} />
                 <ListItemText primary={club} />
               </MenuItem>
             ))}
@@ -298,7 +304,7 @@ export const Form: FunctionComponent = () => {
         >
           {bodyParts.map((part) => (
             <MenuItem key={part} value={part}>
-              <Checkbox checked={kaigan.bodyParts.indexOf(part) > -1} />
+              <Checkbox checked={kaigan.bodyParts?.indexOf(part) > -1} />
               <ListItemText primary={part} />
             </MenuItem>
           ))}
@@ -322,7 +328,7 @@ export const Form: FunctionComponent = () => {
         >
           {actions.map((error) => (
             <MenuItem key={error} value={error}>
-              <Checkbox checked={kaigan.actions.indexOf(error) > -1} />
+              <Checkbox checked={kaigan.actions?.indexOf(error) > -1} />
               <ListItemText primary={error} />
             </MenuItem>
           ))}
