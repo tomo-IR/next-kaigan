@@ -87,7 +87,7 @@ function getStyles(name: string, personName: string[], theme: Theme) {
         : theme.typography.fontWeightMedium,
   };
 }
-export const KaiganForm = (kgn: Kaigan) => {
+export const KaiganForm = (kgn: any) => {
   // const theme = useTheme();
   const [kaigan, setKaigan] = useState<Kaigan>({
     date: kgn.date,

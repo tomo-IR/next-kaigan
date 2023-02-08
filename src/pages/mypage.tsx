@@ -50,7 +50,7 @@ export default function MyPage() {
     /** 購読中にログアウトすると、権限がなくなることによるエラーがでる。 */
     // https://tech-blog-masa7351.netlify.app/onSnapshot_security_error
     db.collection("kaigan")
-      .doc(currentUser.currentUser.uid)
+      .doc(currentUser.currentUser?.uid)
       .get()
       .then(
         (
@@ -103,7 +103,11 @@ export default function MyPage() {
                 <TableCell>{errors}</TableCell>
                 <TableCell>{clubs}</TableCell>
                 <TableCell>
-                  <EditIcon />
+                  <Tooltip title="Update" onClick={() => handleUpdate(item)}>
+                    <IconButton>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
                   <Tooltip title="Delete" onClick={() => handleClickOpen(item)}>
@@ -125,6 +129,15 @@ export default function MyPage() {
   const handleClickOpen = (kaigan: Kaigan) => {
     setDeleteData(kaigan);
     setOpen(true);
+  };
+  const handleUpdate = (kaigan: any) => {
+    router.push(
+      {
+        pathname: "/update",
+        query: kaigan,
+      },
+      "update"
+    );
   };
   const handleClose = () => {
     setOpen(false);
