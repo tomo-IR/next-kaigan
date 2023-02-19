@@ -87,17 +87,17 @@ function getStyles(name: string, personName: string[], theme: Theme) {
         : theme.typography.fontWeightMedium,
   };
 }
-export const KaiganForm = (kgn: any) => {
+export const KaiganForm = (kgn: Kaigan) => {
   // const theme = useTheme();
   const [kaigan, setKaigan] = useState<Kaigan>({
-    date: kgn.date,
-    rank: kgn.rank,
-    places: kgn.places,
-    clubs: kgn.clubs,
-    actions: kgn.actions,
-    bodyParts: kgn.bodyParts,
-    errors: kgn.errors,
-    detail: kgn.detail,
+    date: kgn.date === undefined ? "" : kgn.date,
+    rank: kgn.rank === undefined ? 1 : kgn.rank,
+    places: kgn.places === undefined ? [] : kgn.places,
+    clubs: kgn.clubs === undefined ? [] : kgn.clubs,
+    actions: kgn.actions === undefined ? [] : kgn.actions,
+    bodyParts: kgn.bodyParts === undefined ? [] : kgn.bodyParts,
+    errors: kgn.errors === undefined ? [] : kgn.errors,
+    detail: kgn.detail === undefined ? "" : kgn.detail,
   });
 
   const changeDate = (event: any) => {
@@ -342,7 +342,6 @@ export const KaiganForm = (kgn: any) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {/* {"Use Google's location service?"} */}
           {"下記の内容で登録しますよろしいですか？"}
         </DialogTitle>
         <DialogContent>
@@ -357,6 +356,7 @@ export const KaiganForm = (kgn: any) => {
         <DialogActions>
           <Button onClick={handleClose}>キャンセル</Button>
           <Button onClick={handleRegistKaigan} autoFocus>
+            {/*TODO 更新画面だったら、更新するに変える */}
             登録する
           </Button>
         </DialogActions>
@@ -365,6 +365,7 @@ export const KaiganForm = (kgn: any) => {
       <Button variant="outlined" onClick={handleClickOpen}>
         開眼を登録する
       </Button>
+      {/*TODO 戻るボタン追加 */}
     </>
   );
 };
