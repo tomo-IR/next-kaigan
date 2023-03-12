@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import { Router } from "next/router";
-import { Login } from "../hooks/auth/login";
+import { Login } from "../../hooks/auth/login";
 import router from "next/router";
 
 export const LoginButton = () => {
