@@ -20,8 +20,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useDeleteKaigan } from "../hooks/kaigan/useDeleteKaigan";
-import { useGetKaigan } from "../hooks/kaigan/useGetKaigan";
+import { UseDeleteKaigan } from "../hooks/kaigan/useDeleteKaigan";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import router from "next/router";
@@ -40,7 +39,7 @@ export default function MyPage() {
   const [deleteData, setDeleteData] = useState<Kaigan>();
   const handleDeleteKaigan = () => {
     if (deleteData) {
-      useDeleteKaigan(deleteData, currentUser.currentUser.uid);
+      UseDeleteKaigan(deleteData, currentUser.currentUser.uid);
       return;
     }
     console.log("データないよ");

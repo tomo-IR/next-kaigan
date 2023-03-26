@@ -10,7 +10,7 @@ import { useContext } from "react";
 
 const db = firebase.firestore();
 
-export const useDeleteKaigan = (kaigan: Kaigan, uid: string) => {
+export const UseDeleteKaigan = (kaigan: Kaigan, uid: string) => {
   const docRef = db.collection("kaigan").doc(uid);
   docRef.get().then(async (data) => {
     if (data.exists) {

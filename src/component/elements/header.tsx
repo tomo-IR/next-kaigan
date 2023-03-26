@@ -3,7 +3,7 @@ import { Nav } from "./nav/nav";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
-import "../hooks/firebase/fire";
+import "../../hooks/firebase/fire";
 import { LogoutButton } from "./signOutButton";
 import { LoginButton } from "./signInButton";
 import { AuthContext } from "../auth/AuthProvider";

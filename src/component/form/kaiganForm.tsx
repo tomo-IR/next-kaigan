@@ -17,8 +17,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useRegistKaigan } from "@/src/hooks/kaigan/useRegistKaigan";
+import { UseRegistKaigan } from "@/src/hooks/kaigan/useRegistKaigan";
 import { Kaigan } from "@/src/interface/kaigan";
+import { useRouter } from "next/router";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -174,10 +175,14 @@ export const KaiganForm = (kgn: Kaigan) => {
     setOpen(false);
   };
   const handleRegistKaigan = () => {
-    useRegistKaigan(kaigan);
+    UseRegistKaigan(kaigan);
     // TODO 成功したら、snacbarを表示
   };
-
+  const [pathName, setPathName] = useState("");
+  const router = useRouter();
+  React.useEffect(() => {
+    setPathName(router.pathname);
+  });
   return (
     <>
       <section>
@@ -361,10 +366,15 @@ export const KaiganForm = (kgn: Kaigan) => {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Button variant="outlined" onClick={handleClickOpen}>
-        開眼を登録する
-      </Button>
+      {pathName === "/new" ? (
+        <Button variant="outlined" onClick={handleClickOpen}>
+          開眼を登録する
+        </Button>
+      ) : (
+        <Button variant="outlined" onClick={handleClickOpen}>
+          開眼を更新する
+        </Button>
+      )}
       {/*TODO 戻るボタン追加 */}
     </>
   );
